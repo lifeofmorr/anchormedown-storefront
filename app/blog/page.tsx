@@ -50,7 +50,13 @@ function ArticleTile({
       <div className="absolute bottom-0 left-0 p-6 md:p-8">
         <p className="text-[11px] uppercase tracking-[0.2em] text-bone/70">
           {fmtDate(article.publishedAt)}
-          {article.tags[0] ? ` · ${article.tags[0]}` : ""}
+          {/* Display rule (brand language): a weight-spec tag from the
+              live data never headlines a tile — show the first plain
+              tag instead, or just the date. Data itself is untouched. */}
+          {(() => {
+            const tag = article.tags.find((t) => !/gsm/i.test(t) && !/^\d+$/.test(t));
+            return tag ? ` · ${tag}` : "";
+          })()}
         </p>
         <h2
           className={`mt-2 font-display uppercase leading-[0.95] text-bone ${
@@ -106,11 +112,15 @@ function TextRow({ article }: { article: BlogArticle }) {
  */
 export default function BlogIndex() {
   const articles = getAllArticles();
-  // Feature rule (brand language ruling, 2026-11-03): the hero tile is
-  // the newest piece whose title does not lead with the old numeric
-  // jargon — article bodies/titles themselves stay at live-store parity.
+  // Feature rule (brand language ruling, 2026-11-03; visual pass,
+  // 2026-11-04): the hero tile is the newest piece whose title does not
+  // lead with the old numeric jargon AND that carries a hero image —
+  // a 21/9 feature tile with no photography reads as a void. Pieces
+  // passed over still run in the grid/archive below, in recency order.
   const feature =
-    articles.find((a) => !/gsm/i.test(a.title)) ?? articles[0];
+    articles.find((a) => !/gsm/i.test(a.title) && a.image) ??
+    articles.find((a) => !/gsm/i.test(a.title)) ??
+    articles[0];
   const rest = feature
     ? articles.filter((a) => a.handle !== feature.handle)
     : [];

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import Providers from "@/components/Providers";
 import { CartProvider } from "@/lib/cart";
 
 const display = Anton({
@@ -40,12 +41,14 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable} ${accent.variable}`}
     >
       <body className="bg-ink font-body text-bone antialiased">
-        <CartProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
+        <Providers>
+          <CartProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <CartDrawer />
+          </CartProvider>
+        </Providers>
       </body>
     </html>
   );

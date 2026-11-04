@@ -1,0 +1,36 @@
+// Anchor Me Down — app-owned data layer.
+//
+// SCOPE: Shopify is the system of record for catalog, inventory, orders
+// and customer accounts. This database holds ONLY what this app itself
+// owns: email captures from its own forms (Black Friday early access,
+// giveaway entries, newsletter). No product/order data lives here.
+//
+// PORTABILITY: SQLite for local/staging runtime. The schema uses no
+// SQLite-only types — to move to Postgres, change the datasource
+// provider to "postgresql" and point DATABASE_URL at the instance.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Capture {
+  id        String   @id @default(cuid())
+  email     String
+  // One of: bf-early-access | giveaway | newsletter.
+  // Kept as String (validated by Zod at the service layer) so the
+  // schema stays portable across SQLite and Postgres.
+  source    String
+  consent   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  // One row per person per list — re-submitting is a no-op, never a dupe.
+  @@unique([email, source])
+  @@index([createdAt])
+  @@index([source])
+  @@index([email])
+}

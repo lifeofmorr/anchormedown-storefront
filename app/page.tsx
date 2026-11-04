@@ -454,7 +454,7 @@ export default function HomePage() {
               we release between now and then. One list. No noise.
             </p>
             <div className="mt-10">
-              <CaptureForm source="homepage" />
+              <CaptureForm source="bf-early-access" />
             </div>
           </Reveal>
         </div>

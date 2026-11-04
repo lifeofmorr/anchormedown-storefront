@@ -1,63 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { submitCaptureAction } from "@/app/actions/capture";
+import type { CaptureSource } from "@/lib/validations";
 
 /**
- * Black Friday early-access capture surface.
- * This pass: posts to /api/capture, which stores the signup in the app's
- * local data layer (data/captures.local.json). At cutover this endpoint is
- * swapped for the Shopify customer-create / marketing-consent flow — the
- * form itself does not change. Same tags as the live store: newsletter,
- * bf-first-to-know.
+ * Email capture surface (Black Friday early access, giveaway, newsletter).
+ *
+ * Submits through the capture server action: Zod validation →
+ * token-bucket rate limit → Prisma persistence in the app's own
+ * captures database. Consent is an explicit checkbox — the row records
+ * exactly what the visitor agreed to.
  */
-export default function CaptureForm({ source = "black-friday" }: { source?: string }) {
+export default function CaptureForm({
+  source = "bf-early-access",
+}: {
+  source?: CaptureSource;
+}) {
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [consent, setConsent] = useState(false);
+  const [state, setState] = useState<"idle" | "done" | "error">("idle");
+  const [message, setMessage] = useState("");
+  const [isPending, startTransition] = useTransition();
 
-  async function submit(e: React.FormEvent) {
+  const isBf = source === "bf-early-access";
+  const consentLabel = isBf
+    ? "Email me when early access opens."
+    : source === "giveaway"
+      ? "Email me about the draw and the result."
+      : "Email me the drop news.";
+
+  function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
-    setState("sending");
-    try {
-      const res = await fetch("/api/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source, tags: ["newsletter", "bf-first-to-know"] }),
-      });
-      setState(res.ok ? "done" : "error");
-    } catch {
-      setState("error");
-    }
+    if (!email || !consent) return;
+    startTransition(async () => {
+      const result = await submitCaptureAction({ email, source, consent });
+      if (result.ok) {
+        setState("done");
+      } else {
+        setMessage(
+          result.error.fields?.email ??
+            result.error.message ??
+            "Something went wrong — try again.",
+        );
+        setState("error");
+      }
+    });
   }
 
   if (state === "done") {
     return (
-      <p className="border border-brass/60 bg-brass/10 px-5 py-4 text-sm text-bone">
-        You&apos;re on the list. First word when the drop opens — November 27.
-      </p>
+      <div className="border border-brass/60 bg-brass/10 px-5 py-4">
+        <p className="text-sm font-medium text-bone">You are on the list. Stay anchored.</p>
+        {isBf && (
+          <p className="mt-1 text-sm text-bone/75">
+            First word when the drop opens — November 27.
+          </p>
+        )}
+      </div>
     );
   }
 
   return (
-    <form onSubmit={submit} className="flex w-full max-w-xl flex-col gap-3 sm:flex-row">
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Your email"
-        className="flex-1 border border-seam bg-ink px-5 py-4 text-bone placeholder:text-ash focus:border-brass focus:outline-none"
-      />
-      <button
-        type="submit"
-        disabled={state === "sending"}
-        className="bg-bone px-8 py-4 font-display text-base uppercase tracking-[0.14em] text-ink transition-colors hover:bg-brass disabled:opacity-60"
-      >
-        {state === "sending" ? "Joining…" : "Put me on the list"}
-      </button>
-      {state === "error" && (
-        <p className="text-sm text-red-400">Something went wrong — try again.</p>
-      )}
+    <form onSubmit={submit} className="w-full max-w-xl">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email"
+          aria-label="Your email"
+          className="flex-1 border border-seam bg-ink px-5 py-4 text-bone placeholder:text-ash focus:border-brass focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={isPending || !consent}
+          className="bg-bone px-8 py-4 font-display text-base uppercase tracking-[0.14em] text-ink transition-colors hover:bg-brass disabled:opacity-60"
+        >
+          {isPending ? "Joining…" : "Put me on the list"}
+        </button>
+      </div>
+      <label className="mt-3 flex cursor-pointer items-start gap-2.5 text-left text-xs leading-5 text-ash">
+        <input
+          type="checkbox"
+          checked={consent}
+          onChange={(e) => setConsent(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[#C8A24B]"
+        />
+        <span>{consentLabel} One list, no noise — unsubscribe anytime.</span>
+      </label>
+      {state === "error" && <p className="mt-2 text-sm text-red-400">{message}</p>}
     </form>
   );
 }

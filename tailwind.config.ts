@@ -11,7 +11,6 @@ const config: Config = {
         bone: "#EDEAE3",
         ash: "#9BA0A6",
         brass: "#C8A24B",
-        harbor: "#31505F",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

@@ -59,7 +59,7 @@ export default function BlackFridayPage() {
               <p className="mb-4 text-[12px] uppercase tracking-[0.22em] text-bone/80">
                 First to know: the Black Friday drop
               </p>
-              <CaptureForm source="black-friday-page" />
+              <CaptureForm source="bf-early-access" />
               <p className="mt-3 text-xs leading-5 text-ash">
                 First word when the drop opens, the Black Friday draw, and
                 anything heavy we release between now and then. One list. No

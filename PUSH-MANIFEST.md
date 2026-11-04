@@ -1,96 +1,89 @@
-# PUSH MANIFEST — AMD Headless Storefront (for the MAIN session to push)
+# PUSH MANIFEST — Elevation V2 (full-stack pass) — for the MAIN session to push
 
 Subagents do not push (approval cards can't be collected in subagent
-sessions). Everything below is built, verified, and staged locally.
+sessions). Everything below is built, verified, and committed locally.
 
-## STATUS — refreshed Tue 2026-11-03 ~19:40 ET (preview-deploy run)
-
-- **Production build RE-VERIFIED PASSING tonight** (`npm run build`, exit 0):
-  full route table — `/`, `/cart`, 10 collection pages, 62 product pages,
-  `/pages/black-friday`, `/pages/giveaway`, `/api/capture`, `/llms.txt`.
-- **No Vercel CLI/MCP auth exists on this VM** — checked 2026-11-03:
-  `vercel status` → `not_connected`, no refresh token, no `VERCEL_TOKEN`
-  anywhere in the workspace, no `.vercel/` link in the project. The
-  subagent therefore could NOT deploy directly. (Optional fix for later:
-  connect the Vercel connector at https://agent.meta.ai/connectors/connect/vercel
-  — separate from the browser session below.)
-- **The working route is the one ExploreAwaits proved today:** main-session
-  GitHub push (below) → browser Vercel import under the signed-in Team
-  Hobby account (team-c29c835d, user donmondemorrison-5143), which deployed
-  ExploreAwaits' Next.js app in 38s. Same pattern, one batch:
-
-### One-batch steps for the main session
-
-1. Create repo `lifeofmorr/anchormedown-storefront` and push this folder
-   per the inventory below (message + exclusions as listed).
-2. Browser (signed-in Vercel session): Add New → Project → Import
-   `lifeofmorr/anchormedown-storefront`. Settings: Framework Preset
-   **Next.js**, Root Directory `./`, Production branch `main`,
-   **no environment variables** (catalog is the static snapshot in
-   `data/catalog.json`; `lib/catalog.ts` reads it — no Shopify token
-   needed for the preview). Project name: `anchormedown-storefront`.
-   **No custom domain** — anchormedown.com stays on Shopify until Don's
-   DNS word.
-3. Verify on the returned `*.vercel.app` URL: `/`, one `/products/` page,
-   `/pages/black-friday`, `/cart` — all 200 with real content.
-4. Report the URL to Don in the AMD chat ("Let me see the AMD").
-
-## Suggested repo
-
-- **Name:** `lifeofmorr/anchormedown-storefront` (new repo, private or public
-  at Don's standing GitHub pattern)
+- **Repo:** `lifeofmorr/anchormedown-storefront`
 - **Branch:** `main`
-- **Commit message:** `AMD headless storefront — Next.js build (first wave, full-stack standard)`
-- **Source dir:** this folder
-  (`~/workspace/goals/scale-anchor-me-down-to-1m-month/files/headless-storefront/`)
+- **Local staging:** git initialized in this directory 2026-11-04 with a
+  single commit of the full current tree (the pre-v2 state exists only
+  on the remote). The push that matters is the DELTA list below — the
+  same text files the previous passes shipped, plus the v2 additions.
+  If the main session pushes from its own checkout, apply the delta;
+  the local commit here is the byte-exact staging copy.
+- **Suggested commit message:** `Elevation v2: full-stack pass — Prisma captures DB, operator /admin, rate limiting, typed errors, real form backend`
+- **Full record:** `ELEVATION-V2-RECORD.md` (phases, deviations,
+  smoke-test evidence, visual scores, Vercel env flags).
 
-## File inventory (what to push)
+## Vercel (auto-deploys from main on push)
+Expected preview: https://anchormedown-storefront.vercel.app
+**Set these project env vars** (see ELEVATION-V2-RECORD.md for detail):
+`DATABASE_URL` (Postgres for durable captures — SQLite file resets on
+Vercel), `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`; optional
+`UPSTASH_REDIS_URL` + `UPSTASH_REDIS_TOKEN`.
 
-```
-package.json  package-lock.json  next.config.mjs  tsconfig.json
-postcss.config.mjs  tailwind.config.ts  next-env.d.ts
-app/            layout.tsx · globals.css · page.tsx (home)
-                products/[handle]/page.tsx · collections/page.tsx
-                collections/[handle]/page.tsx · pages/black-friday/page.tsx
-                pages/giveaway/page.tsx · cart/page.tsx
-                api/capture/route.ts · llms.txt/route.ts
-components/     Header · Footer · ProductCard · PurchasePanel
-                CartDrawer · CaptureForm · Reveal
-lib/            types.ts · catalog.ts · cart.tsx · format.ts
-data/           catalog.json (live export, typed) · llms.txt
-scripts/        export-catalog.py · transform-catalog.py
-                catalog-raw.json · meta-raw.json (raw export evidence)
-screenshots/    home-hero · home-full · product-college-special
-                collection-womens · black-friday · cart-empty (PNG proof)
-APPS-AUDIT.md   URL-PARITY.md   PUSH-MANIFEST.md (this file)
-```
+## NEW files (text — push-files route)
+- `.env.example`
+- `vercel.json`
+- `middleware.ts`
+- `prisma/schema.prisma`
+- `prisma/seed.ts`
+- `prisma/migrations/migration_lock.toml`
+- `prisma/migrations/*/migration.sql` (the `*_init` migration)
+- `lib/env.ts`
+- `lib/db.ts`
+- `lib/rate-limiter.ts`
+- `lib/errors.ts`
+- `lib/security.ts`
+- `lib/session.ts`
+- `lib/validations/index.ts`
+- `lib/repositories/capture-repository.ts`
+- `lib/repositories/catalog-repository.ts`
+- `lib/services/capture-service.ts`
+- `lib/services/catalog-service.ts`
+- `app/actions/capture.ts`
+- `app/api/admin/login/route.ts`
+- `app/api/admin/logout/route.ts`
+- `app/api/admin/stats/route.ts`
+- `app/admin/page.tsx`
+- `app/admin/login/page.tsx`
+- `app/admin/loading.tsx`
+- `app/not-found.tsx`
+- `app/error.tsx`
+- `app/blog/loading.tsx`
+- `app/search/loading.tsx`
+- `app/template.tsx`
+- `components/Providers.tsx`
+- `components/Skeletons.tsx`
+- `components/ui/DataTable.tsx`
+- `components/admin/EntriesTable.tsx`
+- `components/admin/CapturesChart.tsx`
+- `components/admin/LogoutButton.tsx`
+- `ELEVATION-V2-RECORD.md`
 
-## Do NOT push
+## MODIFIED files (text — push-files route)
+- `package.json` (deps: zod, prisma + @prisma/client, @tanstack/react-query,
+  framer-motion, recharts, @upstash/redis, next-themes; devDeps: tsx,
+  playwright-core; scripts: postinstall/db:*)
+- `package-lock.json` (regenerated; registry URLs normalized to npmjs)
+- `.gitignore` (.env, *.db, .vercel added)
+- `next.config.mjs` (security headers added; images/rewrites untouched)
+- `app/layout.tsx` (Providers wrap)
+- `tailwind.config.ts` (unused blue `harbor` token removed)
+- `app/api/capture/route.ts` (rewritten onto the service stack)
+- `components/CaptureForm.tsx` (server action + consent + new success copy)
+- `app/page.tsx` (CaptureForm source → bf-early-access)
+- `app/pages/black-friday/page.tsx` (CaptureForm source → bf-early-access)
+- `app/blog/page.tsx` (feature rule prefers an imaged article; tile meta
+  skips weight-spec tags)
+- `PUSH-MANIFEST.md` (this file)
 
-- `node_modules/`, `.next/` (build output) — add a `.gitignore` at push time
-  if the main session wants one; both are regenerable (`npm install`,
-  `npm run build`).
-- `data/captures.local.json` — runtime capture store, created on first
-  signup; never commit customer emails.
+## Binary (GitHub web-UI route, or omit — proof artifacts)
+- `screenshots/home-hero-v2.png`, `screenshots/weight-room-v2.png`,
+  `screenshots/product-v2.png`, `screenshots/black-friday-v2.png`,
+  `screenshots/blog-index-v2.png`, `screenshots/blog-feature-v2.png`,
+  `screenshots/admin-v2.png`, `screenshots/admin-entries-v2.png`
 
-## Verification the pusher can re-run
-
-- `npm install && npm run build` → 82 pages, clean compile (Next 15.5.7,
-  patched line — do not downgrade to 15.1.x, it carries CVE-2025-66478).
-- `npm run start` → `/`, `/products/college-special`, `/collections`,
-  `/pages/black-friday`, `/pages/giveaway`, `/cart`, `/llms.txt` all 200.
-- POST `/api/capture` with a test email → `{"ok":true}` + a row in
-  `data/captures.local.json` tagged `newsletter, bf-first-to-know`.
-
-## After the push (cutover chain — NOT part of this push)
-
-1. Connect the repo in Vercel (browser import under Team Hobby
-   team-c29c835d — proven route, see STATUS at top) → deploy on a
-   `*.vercel.app` URL → live re-measure.
-2. Create the Shopify Storefront API token (headless channel apps are
-   already installed) → swap `lib/catalog.ts` to live data.
-3. Swap `/api/capture` to the Shopify customer-create/consent flow.
-4. Re-embed TrustedSite; eyeball Admin → Customer events for custom pixels
-   (see APPS-AUDIT.md).
-5. Only then: DNS decision — and never inside Nov 27–30 Black Friday
-   weekend without Don's explicit word.
+## NEVER push
+- `.env` (real values), `prisma/dev.db` (local database),
+  `data/captures.local.json` (legacy capture file) — all gitignored.
