@@ -3,6 +3,10 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import CaptureForm from "@/components/CaptureForm";
+import HeroWorlds from "@/components/HeroWorlds";
+import CampaignFilms from "@/components/CampaignFilms";
+import Runway from "@/components/Runway";
+import WorldStory from "@/components/WorldStory";
 import {
   getCollectionProducts,
   getProduct,
@@ -13,8 +17,6 @@ export default function HomePage() {
   const heroes425 = getVerifiedGsmProducts(425);
   const bestSellers = getCollectionProducts("best-sellers");
   const womens = getCollectionProducts("womens-collection");
-  const heroProduct = getProduct("embraced") ?? heroes425[0];
-  const heroImg = heroProduct?.images[0];
   const standard = getProduct("anchor-standard");
   const hoodieFeature = getProduct("mini-anchor-hoodie");
 
@@ -22,20 +24,7 @@ export default function HomePage() {
     <>
       {/* ——— HERO ——— */}
       <section className="relative flex min-h-[100svh] items-end overflow-hidden">
-        {heroImg && (
-          <div className="absolute inset-0">
-            <Image
-              src={heroImg.url}
-              alt={heroImg.alt}
-              fill
-              priority
-              sizes="100vw"
-              className="hero-drift object-cover object-top"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/20" />
-            <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent" />
-          </div>
-        )}
+        <HeroWorlds />
         <div className="relative mx-auto w-full max-w-[1440px] px-5 pb-20 pt-44 md:px-10">
           <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
             Heavyweight Apparel — Iron × Water
@@ -89,6 +78,9 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* ——— CAMPAIGN FILMS (live position 2) ——— */}
+      <CampaignFilms />
 
       {/* ——— THE 425 LINE ——— */}
       <section className="mx-auto max-w-[1440px] px-5 py-24 md:px-10 md:py-32">
@@ -191,6 +183,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ——— SOCIAL RUNWAY (live position 4) ——— */}
+      <Runway />
+
       {/* ——— HOODIE FEATURE ——— */}
       {hoodieFeature?.images[0] && (
         <section className="bg-coal">
@@ -256,6 +251,9 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ——— WORLD STORY (live world-experience film panel) ——— */}
+      <WorldStory />
 
       {/* ——— BLACK FRIDAY CAPTURE ——— */}
       <section className="relative overflow-hidden border-y border-seam bg-harbor/25">
