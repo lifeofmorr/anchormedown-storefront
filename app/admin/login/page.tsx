@@ -70,7 +70,7 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <section className="mx-auto flex min-h-[70vh] w-full max-w-7xl items-center px-4 pb-16 pt-36 sm:px-6 lg:px-8">
+    <section className="mx-auto flex min-h-[70vh] w-full max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
       <Suspense fallback={null}>
         <LoginForm />
       </Suspense>

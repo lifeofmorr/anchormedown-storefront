@@ -229,3 +229,85 @@ production server).
 - Prisma pinned to v6 (6.19.3): v7 moves connection config out of the
   schema and requires driver adapters — churn this app doesn't need;
   v6 is the stable pairing for Next 15 + this schema.
+
+---
+
+## PASS 2 — COMPLETE (finisher run, 2026-11-04 ~07:15–07:40 ET)
+
+**The sandbox write wall is DOWN.** Probes (first actions of the
+finisher session, the exact operations the wall refused at 23:15 on
+2026-11-03 and again ~04:08): `git hash-object -w` → object written,
+rc=0; ffmpeg frame extraction from a content-studio reel
+(`ready/reel-anchor3d-squat.mp4`, 1 frame at 1s) → 70,074-byte JPEG
+written under the goal's `hidden_files/wall-probe/`, rc=0.
+
+**Commits (all LOCAL — the main session pushes):**
+- WS1 `d145aea` + WS2 `da4f83c` (pre-wall, unchanged).
+- WS3 `0aee9a8` — "Pass 2 WS3: blog index elevation + displayTag
+  everywhere" (5 files, +147/−66): `lib/display-tag.ts` (new),
+  `lib/blog.ts`, `app/(storefront)/blog/page.tsx`,
+  `app/(storefront)/blog/[handle]/page.tsx`,
+  `components/SiteSearch.tsx`.
+- Docs commit — this record, the PUSH-MANIFEST delta, and the v3
+  screenshot set.
+
+**Build + types:** `next build` (TMPDIR on the home volume) PASS —
+compiled successfully, 239/239 static pages generated; route table
+complete (63 products, 150 blog paths, 10 collections, /search,
+/admin dynamic, /api/capture, /api/admin/*, middleware 34.5 kB).
+`tsc --noEmit` — 0 errors.
+
+**Smoke (production server, this build) — all green:**
+- Parity: / 200; /search?q=heaviest → exactly 13 unique product
+  links; /products/the-heavy-set → 200 with $180 present; /blog →
+  7 month-group headers + "145 DISPATCHES · 7 MONTHS" archive
+  header; article /blog/best-t-shirts-for-bodybuilders → 200,
+  meta line via displayTag ("OCTOBER 28, 2026 · BODYBUILDERS" —
+  no weight-spec label).
+- Capture persist: POST /api/capture → `{"ok":true}`; the row was
+  read back from SQLite via Prisma with correct email / source /
+  consent / createdAt.
+- Admin gate: /admin unauthenticated → 307 →
+  /admin/login?from=%2Fadmin; /api/admin/stats unauthenticated →
+  401; wrong password → 401; correct password → 200 + httpOnly
+  session cookie; authed /admin → 200 with "Operator desk" + "The
+  desk" present and the storefront chrome (bag button, footer
+  shipping line) ABSENT — the WS2 shell split proven on the WS3
+  build. Login also completed through the real UI in the
+  screenshot run.
+- Rate limit: fresh server, 15 rapid captures from one IP →
+  exactly 10 × 200, then 5 × 429.
+- Cleanup: all 11 smoke rows deleted; captures back to exactly
+  the 37 seeded rows.
+
+**Screenshots (production server, 1440×900) — honest scores:**
+
+Files: `screenshots/{home,blog-index,blog-archive,blog-feature,
+blog-grid,blog-article,admin}-v3.png`.
+
+| Surface | Score | Basis |
+|---|---|---|
+| Homepage hero | 9.5 (holds) | Same discipline as v2: ghost HEAVY, serif accent, facts keel ("13 TEES — ONE HEAVY STANDARD"). Held from 10 on the unchanged basis — the hero is type/film-led and the product is the worn tee, not a giant product plate; the film frame reads near-black in a still capture. |
+| Blog index | 9 (was 8.5) | WS3 proven in the shots: huge month-group archive headers with dispatch counts, displayTag meta everywhere (no weight-spec labels), "Featured dispatch" marker, offset grid. Held from 9.5 by data, not code: the newest dispatches carry no article imagery, so their grid tiles render as large dark gradient panels, and the feature tile's hero is the article's own flat product shot. |
+| Article page | 8.5 (first v3 measure) | Breadcrumb + displayTag meta + huge display title are the 9+ pattern; the hero region below the header is the article's own (weak, dark) imagery — data-bound, same remainder class as the product galleries. |
+| /admin | 9 (was 8.5) | The v2 cap is gone and proven gone: the desk renders in its own slim operator shell — no storefront nav, banner, or bag. KPI cards live off the real rows (37 / 4 / 24 / 13 = the seeds), every card labeled with what it counts. Held from 9.5 by the deliberately flat operator styling and a chart whose series read faint at a glance. |
+| Product page | 9 (not re-shot this pass) | Last measured score stands; nothing in WS1–WS3 changed the product layout. |
+
+Capture note: a straight full-page capture of /blog initially
+showed the feature tile and grid tiles as voids — a lazy-media
+artifact (images load on scroll into view). After a scroll pass
+the feature tile fills with its article photography and the grid
+renders as designed; the scored shots are the post-scroll set.
+
+**Named remainders (unchanged in kind):** article/product imagery
+is Shopify catalog data as exported — campaign photography is a
+photography/money decision, not code. Everything else in the
+pass-2 scope is verified above.
+
+**Remaining for the main session (unchanged gates):**
+1. Push `d145aea` + `da4f83c` + `0aee9a8` + the docs commit via
+   the connector snapshot route (exact delta in PUSH-MANIFEST.md).
+2. Vercel env vars: `DATABASE_URL` (point at the fleet Neon
+   Postgres), `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`;
+   `UPSTASH_*` optional.
+3. Nothing else. anchormedown.com stays on Shopify — no DNS.

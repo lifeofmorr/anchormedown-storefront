@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import CartDrawer from "@/components/CartDrawer";
 import Providers from "@/components/Providers";
-import { CartProvider } from "@/lib/cart";
 
 const display = Anton({
   weight: "400",
@@ -30,6 +26,12 @@ export const metadata: Metadata = {
     "The heaviest tee in the game. Built between the iron and the water. Stay Anchored.",
 };
 
+/**
+ * Root layout — document shell only: fonts, global CSS, providers.
+ * The storefront chrome lives in (storefront)/layout.tsx and the
+ * operator chrome in admin/layout.tsx, so /admin never inherits the
+ * shop's header, footer, or cart.
+ */
 export default function RootLayout({
   children,
 }: {
@@ -41,14 +43,7 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable} ${accent.variable}`}
     >
       <body className="bg-ink font-body text-bone antialiased">
-        <Providers>
-          <CartProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <CartDrawer />
-          </CartProvider>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

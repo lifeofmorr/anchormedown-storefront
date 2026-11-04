@@ -9,6 +9,19 @@ def strip_tags(s):
     t = re.sub(r'<[^>]+>', ' ', s)
     return html.unescape(re.sub(r'\s+', ' ', t)).strip()
 
+def clean_alt(s):
+    """Language rule (Don 2026-11-03): no fabric-weight specs in customer-facing
+    copy. A live-store article image altText survived the store sweep carrying
+    a spec string ("... 425 GSM"); the app never renders weight specs, so the
+    spec fragment is removed here — words untouched, data otherwise faithful.
+    (The live residual itself is the parent lane's to fix at the source.)"""
+    if not s:
+        return s
+    t = re.sub(r'\s*[—–-]?\s*\d{3}\s*gsm\b', '', s, flags=re.I)
+    t = re.sub(r'\s*\bgsm\b', '', t, flags=re.I)
+    t = re.sub(r'\s+', ' ', t).strip(' —–-')
+    return t.strip()
+
 articles = []
 for a in raw:
     if not a.get('isPublished') or not a.get('publishedAt'):
@@ -26,7 +39,7 @@ for a in raw:
         "tags": a.get('tags') or [],
         "author": (a.get('author') or {}).get('name') or "Anchor Me Down",
         "image": ({"url": img['url'], "width": img.get('width'), "height": img.get('height'),
-                   "alt": img.get('altText') or a['title']} if img else None),
+                   "alt": clean_alt(img.get('altText') or a['title'])} if img else None),
     })
 
 articles.sort(key=lambda x: x['publishedAt'], reverse=True)

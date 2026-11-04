@@ -58,7 +58,7 @@ export default async function AdminPage({
   ];
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pb-10 pt-36 sm:px-6 lg:px-8">
+    <section className="mx-auto w-full max-w-7xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[11px] uppercase tracking-[0.35em] text-brass">Anchor Me Down · Operator</p>

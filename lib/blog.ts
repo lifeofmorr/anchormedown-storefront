@@ -19,6 +19,9 @@ export function getArticle(handle: string): BlogArticle | undefined {
   return blog.articles.find((a) => a.handle === handle);
 }
 
+/** See lib/display-tag.ts — the customer-safe tag display rule. */
+export { displayTag } from "./display-tag";
+
 /**
  * Products an article points at: first, products linked in the body
  * (/products/<handle>); then products whose title/tags match the

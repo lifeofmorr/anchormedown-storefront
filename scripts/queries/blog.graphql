@@ -1,0 +1,25 @@
+query BlogArticles($cursor: String) {
+  blog(id: "gid://shopify/Blog/57294787") {
+    id
+    handle
+    title
+    articles(first: 50, after: $cursor, reverse: true) {
+      pageInfo { hasNextPage endCursor }
+      edges {
+        node {
+          id
+          handle
+          title
+          summary
+          body
+          publishedAt
+          updatedAt
+          tags
+          isPublished
+          author { name }
+          image { url width height altText }
+        }
+      }
+    }
+  }
+}

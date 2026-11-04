@@ -87,3 +87,45 @@ Vercel), `ADMIN_PASSWORD`, `NEXT_PUBLIC_SITE_URL`; optional
 ## NEVER push
 - `.env` (real values), `prisma/dev.db` (local database),
   `data/captures.local.json` (legacy capture file) — all gitignored.
+
+---
+
+## PASS 2 delta — FINAL (2026-11-04; verification complete, see ELEVATION-V2-RECORD.md)
+
+Commits to push, in order: WS1 `d145aea` → WS2 `da4f83c` → WS3
+`0aee9a8` → the docs commit carrying this manifest. Exact delta vs
+the V2 push, from `git diff --name-status 37461a0..HEAD` (text
+files — push-files route):
+
+- RENAMED into `app/(storefront)/` (R100): `blog/[handle]/page.tsx`,
+  `blog/loading.tsx`, `blog/page.tsx`, `cart/page.tsx`,
+  `collections/[handle]/page.tsx`, `collections/page.tsx`, `page.tsx`,
+  `pages/black-friday/page.tsx`, `pages/giveaway/page.tsx`,
+  `products/[handle]/page.tsx`, `search/loading.tsx`,
+  `search/page.tsx`, `template.tsx` (all from their pre-group paths).
+  WS3 then rewrote `app/(storefront)/blog/page.tsx` on top of the
+  rename (delta renders it as A + D of the old path) and modified
+  `app/(storefront)/blog/[handle]/page.tsx` (R098).
+- NEW: `app/(storefront)/error.tsx`, `app/(storefront)/layout.tsx`,
+  `app/(storefront)/not-found.tsx`, `app/admin/layout.tsx`,
+  `components/ErrorContent.tsx`, `components/NotFoundContent.tsx`,
+  `lib/display-tag.ts`,
+  `scripts/carry-forward-gsm.py`, `scripts/export-meta.py`,
+  `scripts/queries/blog.graphql`, `scripts/queries/meta.graphql`,
+  `scripts/queries/products.graphql`
+- MODIFIED: `app/admin/loading.tsx`, `app/admin/login/page.tsx`,
+  `app/admin/page.tsx`, `app/error.tsx`, `app/layout.tsx`,
+  `app/not-found.tsx`, `components/SiteSearch.tsx`, `lib/blog.ts`,
+  `data/blog.json`, `data/catalog.json`, `data/llms.txt`,
+  `scripts/blog-raw.json`, `scripts/catalog-raw.json`,
+  `scripts/meta-raw.json`, `scripts/transform-blog.py`,
+  `ELEVATION-V2-RECORD.md`, `PUSH-MANIFEST.md`
+
+## Binary (GitHub web-UI route, or omit — proof artifacts)
+- Pass 2: `screenshots/home-v3.png`, `screenshots/blog-index-v3.png`,
+  `screenshots/blog-archive-v3.png`, `screenshots/blog-feature-v3.png`,
+  `screenshots/blog-grid-v3.png`, `screenshots/blog-article-v3.png`,
+  `screenshots/admin-v3.png`
+
+NEVER-push list above is unchanged (`.env`, `prisma/dev.db`,
+`data/captures.local.json`).

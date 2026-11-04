@@ -1,0 +1,50 @@
+query Products($cursor: String) {
+  products(first: 50, after: $cursor) {
+    pageInfo { hasNextPage endCursor }
+    edges {
+      node {
+        id
+        legacyResourceId
+        title
+        handle
+        description
+        descriptionHtml
+        productType
+        tags
+        status
+        options { name values }
+        priceRangeV2 {
+          minVariantPrice { amount currencyCode }
+          maxVariantPrice { amount currencyCode }
+        }
+        media(first: 30) {
+          edges {
+            node {
+              mediaContentType
+              alt
+              ... on MediaImage {
+                image { url width height altText }
+              }
+            }
+          }
+        }
+        variants(first: 100) {
+          edges {
+            node {
+              id
+              title
+              sku
+              price
+              compareAtPrice
+              availableForSale
+              selectedOptions { name value }
+            }
+          }
+        }
+        collections(first: 10) {
+          edges { node { handle title } }
+        }
+      }
+    }
+  }
+}

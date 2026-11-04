@@ -1,0 +1,28 @@
+query Meta {
+  collections(first: 20) {
+    edges {
+      node {
+        id
+        handle
+        title
+        description
+        image { url width height altText }
+        productsCount { count }
+        products(first: 100) {
+          edges { node { handle } }
+        }
+      }
+    }
+  }
+  pages(first: 50) {
+    edges {
+      node {
+        id
+        handle
+        title
+        body
+        isPublished
+      }
+    }
+  }
+}

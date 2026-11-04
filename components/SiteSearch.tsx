@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { priceLabel } from "@/lib/format";
+import { displayTag } from "@/lib/display-tag";
 
 export interface SearchProduct {
   handle: string;
@@ -196,7 +197,7 @@ export default function SiteSearch({
                       day: "numeric",
                       timeZone: "UTC",
                     })}
-                    {a.tags[0] ? ` · ${a.tags[0]}` : ""}
+                    {displayTag(a.tags) ? ` · ${displayTag(a.tags)}` : ""}
                   </p>
                   <h3 className="mt-1.5 font-display text-2xl uppercase leading-tight text-bone transition-colors group-hover:text-brass">
                     {a.title}
