@@ -10,7 +10,10 @@ export interface SearchProduct {
   title: string;
   productType: string;
   tags: string[];
-  gsm: number | null;
+  /** Internal data plumbing for the silent legacy-token match — never rendered. */
+  weightValue: number | null;
+  /** True for the verified heaviest line — drives the word badge. */
+  heaviest: boolean;
   collections: string[];
   priceMin: number;
   priceMax: number;
@@ -36,9 +39,12 @@ function score(haystack: string, tokens: string[]): number {
 
 /**
  * Site search — real client-side search over the typed catalog + blog
- * exports. Token match across title, tags, GSM, collection, type (and
- * article title/tags/excerpt); a bare number also matches a product's
- * verified GSM exactly. Results render as product and article cards.
+ * exports. Token match across title, tags, weight class, collection,
+ * type (and article title/tags/excerpt). Word queries ("heaviest")
+ * find the heavy line through the index's word tokens; a bare legacy
+ * number token also matches silently through the server-built index —
+ * neither the number nor the unit is ever displayed (brand language
+ * ruling, 2026-11-03). Results render as product and article cards.
  */
 export default function SiteSearch({
   products,
@@ -63,7 +69,7 @@ export default function SiteSearch({
       .map((p) => {
         let s = score(p.haystack, tokens);
         numeric.forEach((n) => {
-          if (n !== null && p.gsm === n) s += 2;
+          if (n !== null && p.weightValue === n) s += 2;
         });
         return { p, s };
       })
@@ -95,7 +101,7 @@ export default function SiteSearch({
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Try “425”, “hoodie”, “giveaway”, “iron”…"
+          placeholder="Try “heaviest”, “hoodie”, “giveaway”, “iron”…"
           aria-label="Search products and the journal"
           className="w-full bg-transparent text-base text-bone placeholder:text-ash focus:outline-none"
         />
@@ -113,7 +119,7 @@ export default function SiteSearch({
       {!searched && (
         <p className="mt-10 max-w-xl text-sm leading-6 text-ash">
           Search the whole rack and all {articles.length} journal dispatches
-          — by product, fabric weight, collection, or story.
+          — by product, collection, or story.
         </p>
       )}
 
@@ -121,7 +127,7 @@ export default function SiteSearch({
         <p className="mt-10 text-[11px] uppercase tracking-[0.2em] text-ash">
           {productHits.length} products · {articleHits.length} dispatches
           {productHits.length + articleHits.length === 0 &&
-            " — nothing on the rack matches that. Try a weight, a garment, or a plainer word."}
+            " — nothing on the rack matches that. Try a garment, a collection, or a plainer word."}
         </p>
       )}
 
@@ -141,9 +147,9 @@ export default function SiteSearch({
                       className="object-cover transition-all duration-700 group-hover:scale-[1.04]"
                     />
                   )}
-                  {p.gsm !== null && (
+                  {p.heaviest && (
                     <span className="absolute left-3 top-3 bg-ink/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brass">
-                      {p.gsm} GSM
+                      The Heaviest
                     </span>
                   )}
                 </div>

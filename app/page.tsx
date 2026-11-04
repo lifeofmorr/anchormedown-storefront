@@ -16,8 +16,8 @@ import { HERO_WORLDS } from "@/lib/campaign";
 import { money } from "@/lib/format";
 import {
   getCollectionProducts,
+  getHeaviestProducts,
   getProduct,
-  getVerifiedGsmProducts,
 } from "@/lib/catalog";
 
 function optionValues(handle: string, name: string): string[] {
@@ -26,9 +26,9 @@ function optionValues(handle: string, name: string): string[] {
 }
 
 export default function HomePage() {
-  const heroes425 = getVerifiedGsmProducts(425);
-  const featured425 = getProduct("college-special") ?? heroes425[0];
-  const rest425 = heroes425.filter((p) => p.handle !== featured425?.handle);
+  const heaviestLine = getHeaviestProducts();
+  const featuredHeavy = getProduct("college-special") ?? heaviestLine[0];
+  const restHeavy = heaviestLine.filter((p) => p.handle !== featuredHeavy?.handle);
   const bestSellers = getCollectionProducts("best-sellers");
   const womens = getCollectionProducts("womens-collection");
   const standard = getProduct("anchor-standard");
@@ -42,29 +42,26 @@ export default function HomePage() {
         <HeroWorlds />
         <span
           aria-hidden="true"
-          className="text-stroke-faint pointer-events-none absolute -right-8 top-[13%] z-0 select-none font-display text-[36vw] leading-none"
+          className="text-stroke-faint pointer-events-none absolute -right-8 top-[13%] z-0 select-none font-display text-[23vw] leading-none"
         >
-          425
+          HEAVY
         </span>
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-36 pt-44 md:px-10">
           <Parallax speed={0.045}>
             <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
               Heavyweight Apparel — Iron × Water
             </p>
-            <h1 className="mt-5 font-display uppercase leading-[0.85] text-bone text-[21vw] sm:text-[16vw] lg:text-[13.5rem]">
-              425 GSM.
-            </h1>
-            <p className="mt-3 font-display text-[8vw] uppercase leading-[0.95] text-bone/90 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5 font-display uppercase leading-[0.88] text-bone text-[13vw] sm:text-[11vw] lg:text-[9.5rem]">
               The{" "}
               <span className="font-accent normal-case italic tracking-normal text-brass">
                 heaviest
               </span>{" "}
               tee in the game.
-            </p>
+            </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-bone/75">
               Built between the iron and the water. Garment-dyed, boxy, cut
-              to be trained in and lived in — with the fabric weight printed
-              on every page, because we don&apos;t hide ours.
+              to be trained in and lived in — heavy enough that you feel it
+              the second you pick it up.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
@@ -85,8 +82,8 @@ export default function HomePage() {
         {/* Verified-facts strip along the hero's keel */}
         <div className="absolute inset-x-0 bottom-0 z-10 border-t border-bone/15 bg-ink/40 backdrop-blur-sm">
           <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 md:px-10">
-            <span>13 tees — one verified weight</span>
-            <span className="hidden md:block">Weight printed on every page</span>
+            <span>13 tees — one heavy standard</span>
+            <span className="hidden md:block">Built heavy, every one</span>
             <span className="hidden lg:block">Garment-dyed · Boxy · XS–2XL</span>
             <span>Iron × Water</span>
           </div>
@@ -100,7 +97,7 @@ export default function HomePage() {
             <span key={dup} className="flex gap-12">
               {[
                 "Stay Anchored",
-                "425 GSM",
+                "Built Heavy",
                 "Iron × Water",
                 "Heaviest Tee In The Game",
                 "Free Shipping $200+",
@@ -116,47 +113,47 @@ export default function HomePage() {
       </div>
 
       {/* ——— THE WEIGHT ROOM — the interactive instrument ——— */}
-      <WeightRoom line={heroes425} />
+      <WeightRoom line={heaviestLine} />
 
       {/* ——— CAMPAIGN FILMS (live position 2) ——— */}
       <CampaignFilms />
 
-      {/* ——— THE 425 LINE — an editorial spread, not a grid ——— */}
+      {/* ——— THE HEAVY LINE — an editorial spread, not a grid ——— */}
       <section className="relative mx-auto max-w-[1440px] overflow-hidden px-5 py-24 md:px-10 md:py-36">
         <span
           aria-hidden="true"
-          className="text-stroke-faint pointer-events-none absolute -left-4 top-6 select-none font-display text-[13rem] leading-none md:text-[20rem]"
+          className="text-stroke-faint pointer-events-none absolute -left-4 top-6 select-none font-display text-[10rem] leading-none md:text-[16rem]"
         >
-          425
+          HEAVY
         </span>
         <Reveal className="relative">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
-                03 · The Verified Heavyweights
+                03 · The Heavyweights
               </p>
               <h2 className="mt-3 font-display text-6xl uppercase leading-[0.9] text-bone md:text-8xl">
-                The 425 line
+                The heavy line
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-6 text-ash">
-              Thirteen tees. One fabric weight, printed on every product
-              page: 425 grams per square meter of garment-dyed cotton. Most
-              brands won&apos;t tell you theirs.
+              Thirteen tees. One standard: the heaviest garment-dyed cotton
+              we could put on a frame. Most brands build light and hope you
+              won&apos;t notice.
             </p>
           </div>
         </Reveal>
 
         {/* Featured spread — the hero of the line, full width */}
-        {featured425?.images[0] && (
+        {featuredHeavy?.images[0] && (
           <Reveal className="relative mt-14">
             <Link
-              href={`/products/${featured425.handle}`}
+              href={`/products/${featuredHeavy.handle}`}
               className="group relative block h-[68vh] min-h-[440px] overflow-hidden"
             >
               <Image
-                src={featured425.images[0].url}
-                alt={featured425.images[0].alt}
+                src={featuredHeavy.images[0].url}
+                alt={featuredHeavy.images[0].alt}
                 fill
                 sizes="100vw"
                 className="hero-drift object-cover object-top transition-transform duration-[1400ms] group-hover:scale-[1.04]"
@@ -168,16 +165,16 @@ export default function HomePage() {
                     No. 01 — The hero of the line
                   </p>
                   <h3 className="mt-3 font-display text-5xl uppercase leading-[0.9] text-bone md:text-7xl">
-                    {featured425.title}
+                    {featuredHeavy.title}
                   </h3>
                   <p className="mt-3 max-w-md text-sm leading-6 text-bone/75">
-                    425 GSM garment-dyed cotton, cut boxy, XS–2XL —{" "}
-                    {money(featured425.priceMin)}. The one the rest of the
+                    Garment-dyed cotton, cut boxy, XS–2XL —{" "}
+                    {money(featuredHeavy.priceMin)}. The one the rest of the
                     line is measured against.
                   </p>
                 </div>
                 <span className="bg-bone px-8 py-4 font-display text-base uppercase tracking-[0.12em] text-ink transition-colors group-hover:bg-brass">
-                  Shop {featured425.title}
+                  Shop {featuredHeavy.title}
                 </span>
               </div>
             </Link>
@@ -186,11 +183,11 @@ export default function HomePage() {
 
         {/* The remaining twelve — staggered columns */}
         <div className="relative mt-16 grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-3">
-          {rest425.map((p, i) => (
+          {restHeavy.map((p, i) => (
             <div key={p.handle} className={i % 3 === 1 ? "lg:mt-14" : ""}>
               <Reveal delay={(i % 3) * 80}>
                 <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-ash">
-                  No. {String(i + 2).padStart(2, "0")} — 425 GSM
+                  No. {String(i + 2).padStart(2, "0")}
                 </p>
                 <ProductCard product={p} />
               </Reveal>
@@ -199,7 +196,7 @@ export default function HomePage() {
         </div>
         <Reveal className="relative mt-16 border-t border-seam pt-8 text-center">
           <p className="text-[12px] uppercase tracking-[0.22em] text-ash">
-            Thirteen tees · One weight · $60 every one
+            Thirteen tees · One standard · $60 every one
           </p>
           <Link
             href="/collections/t-shirts-1"
@@ -238,9 +235,9 @@ export default function HomePage() {
                     Standard
                   </h2>
                   <p className="mt-5 max-w-md text-base leading-7 text-bone/80">
-                    The tee the whole line is built on. 425 GSM garment-dyed
-                    cotton, boxy cut, XS–2XL — {`$60`}, and it does not need
-                    a draw to be worth it.
+                    The tee the whole line is built on. Garment-dyed
+                    cotton, built heavy, boxy cut, XS–2XL — {`$60`}, and it
+                    does not need a draw to be worth it.
                   </p>
                   <Link
                     href={`/products/${standard.handle}`}
@@ -255,7 +252,7 @@ export default function HomePage() {
             <div className="absolute inset-x-0 bottom-0 border-t border-bone/15 bg-ink/45 backdrop-blur-sm">
               <div className="mx-auto flex max-w-[1440px] flex-wrap gap-x-10 gap-y-2 px-5 py-3.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/75 md:px-10">
                 <span>
-                  Weight — <span className="text-brass">425 GSM verified</span>
+                  Build — <span className="text-brass">The heaviest</span>
                 </span>
                 <span>Sizes — XS–2XL</span>
                 {standardColors > 0 && <span>{standardColors} colorways</span>}
@@ -317,7 +314,7 @@ export default function HomePage() {
             <div className="px-5 py-16 md:px-16">
               <Reveal>
                 <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
-                  400 GSM — Verified
+                  Heavyweight Fleece
                 </p>
                 <h2 className="mt-4 font-display text-5xl uppercase leading-[0.92] text-bone md:text-7xl">
                   Heavy is a
@@ -330,12 +327,12 @@ export default function HomePage() {
                 </h2>
                 <p className="mt-6 max-w-md text-base leading-7 text-ash">
                   The hoodie line carries the same discipline as the tees:
-                  380–400 GSM fleece, weights printed on the page. When the
+                  heavyweight fleece, built heavy — no thin layers. When the
                   session ends and the dock gets cold, this is the layer.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-x-10 gap-y-3 border-t border-seam pt-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-bone/75">
                   <span>
-                    This piece — <span className="text-brass">400 GSM</span>
+                    This piece — <span className="text-brass">Heavyweight</span>
                   </span>
                   <span>{money(hoodieFeature.priceMin)}</span>
                   <span>XS–2XL</span>
@@ -391,9 +388,6 @@ export default function HomePage() {
                   </h3>
                   <p className="mt-2 text-sm text-bone/80">
                     {money(womens[0].priceMin)}
-                    {womens[0].gsm !== null && (
-                      <span className="text-brass"> · {womens[0].gsm} GSM</span>
-                    )}
                   </p>
                 </div>
               </Link>

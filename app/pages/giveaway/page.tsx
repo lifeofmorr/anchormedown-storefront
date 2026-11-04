@@ -70,7 +70,7 @@ export default function GiveawayPage() {
                 The standard they won
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-6 text-ash">
-                The draw is closed — the shirts are not. The same 425 GSM
+                The draw is closed — the shirts are not. The same heaviest
                 line, at the standard $60.
               </p>
             </Reveal>

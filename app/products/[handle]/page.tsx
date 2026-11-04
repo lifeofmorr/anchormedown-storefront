@@ -26,7 +26,7 @@ export function generateMetadata({
       title: `${p.title} — Anchor Me Down Apparel`,
       description:
         p.description.slice(0, 155) ||
-        "425 GSM. The heaviest tee in the game. Built between the iron and the water.",
+        "The heaviest tee in the game. Built between the iron and the water.",
     };
   });
 }
@@ -45,12 +45,6 @@ export default async function ProductPage({
   const sizeOpt = product.options.find((o) => o.name.toLowerCase().includes("size"));
   const colorOpt = product.options.find((o) => o.name.toLowerCase().includes("color"));
   const specs: Array<[string, string]> = [
-    [
-      "Fabric weight",
-      product.gsm !== null
-        ? `${product.gsm} GSM — verified, printed`
-        : "Not printed — we print a weight only where it is verified",
-    ],
     ["Price", priceLabel(product.priceMin, product.priceMax)],
     ...(sizeOpt ? [["Sizes", sizeOpt.values.join(" · ")] as [string, string]] : []),
     ...(colorOpt

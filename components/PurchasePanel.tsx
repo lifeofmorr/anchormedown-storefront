@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import type { Product } from "@/lib/types";
+import { isHeaviest, type Product } from "@/lib/types";
 import { money } from "@/lib/format";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_LINE } from "@/lib/catalog";
@@ -42,9 +42,9 @@ export default function PurchasePanel({ product }: { product: Product }) {
               className="object-cover"
             />
           )}
-          {product.gsm !== null && (
+          {isHeaviest(product) && (
             <span className="absolute left-4 top-4 bg-ink/85 px-3 py-1.5 text-[11px] font-semibold tracking-[0.22em] text-brass uppercase backdrop-blur">
-              {product.gsm} GSM — Verified Weight
+              The Heaviest
             </span>
           )}
           {product.images.length > 1 && (
@@ -88,38 +88,34 @@ export default function PurchasePanel({ product }: { product: Product }) {
           )}
         </p>
 
-        {product.gsm !== null ? (
+        {isHeaviest(product) ? (
           <div className="mt-7 border border-brass/40 bg-brass/5 px-6 py-6">
             <div className="flex items-end justify-between gap-4">
-              <p className="font-display text-6xl leading-none text-bone">
-                {product.gsm}
-                <span className="ml-2 align-top text-lg tracking-[0.14em] text-brass">
-                  GSM
-                </span>
+              <p className="font-display text-5xl uppercase leading-[0.9] text-bone md:text-6xl">
+                The
+                <br />
+                Heaviest
               </p>
               <p className="pb-1 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-brass">
-                Verified
+                Our heaviest
                 <br />
-                fabric weight
+                cotton
               </p>
             </div>
             <div className="mt-6 space-y-3">
               <div>
                 <div className="flex justify-between text-[10px] uppercase tracking-[0.2em] text-ash">
-                  <span className="text-bone">This piece</span>
-                  <span>{product.gsm} g/m²</span>
+                  <span className="text-bone">This tee</span>
+                  <span>The heaviest we make</span>
                 </div>
                 <div className="mt-1.5 h-1.5 bg-seam">
-                  <div
-                    className="h-full bg-brass"
-                    style={{ width: `${(product.gsm / 450) * 100}%` }}
-                  />
+                  <div className="h-full w-full bg-brass" />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between text-[10px] uppercase tracking-[0.2em] text-ash">
                   <span>A typical tee</span>
-                  <span>180 g/m²</span>
+                  <span>Built light</span>
                 </div>
                 <div className="mt-1.5 h-1.5 bg-seam">
                   <div className="h-full bg-bone/30" style={{ width: "40%" }} />
@@ -127,8 +123,8 @@ export default function PurchasePanel({ product }: { product: Product }) {
               </div>
             </div>
             <p className="mt-5 text-sm leading-6 text-ash">
-              The fabric weight is printed here because we don&apos;t hide
-              ours. Most brands won&apos;t tell you theirs.
+              You feel it the second you pick it up. Most tees are built
+              light and priced like they aren&apos;t — this one isn&apos;t.
             </p>
           </div>
         ) : null}

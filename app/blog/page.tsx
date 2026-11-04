@@ -106,7 +106,14 @@ function TextRow({ article }: { article: BlogArticle }) {
  */
 export default function BlogIndex() {
   const articles = getAllArticles();
-  const [feature, ...rest] = articles;
+  // Feature rule (brand language ruling, 2026-11-03): the hero tile is
+  // the newest piece whose title does not lead with the old numeric
+  // jargon — article bodies/titles themselves stay at live-store parity.
+  const feature =
+    articles.find((a) => !/gsm/i.test(a.title)) ?? articles[0];
+  const rest = feature
+    ? articles.filter((a) => a.handle !== feature.handle)
+    : [];
   const grid = rest.slice(0, 4);
   const archive = rest.slice(4);
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { getCampaignEntry } from "@/lib/campaign";
 import { getProduct } from "@/lib/catalog";
+import { isHeaviest } from "@/lib/types";
 
 /**
  * IN STILLS — the campaign gallery. Front/back diptychs from the live
@@ -95,8 +96,8 @@ export default function InStills() {
                   </h3>
                   <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-ash">
                     Colorway — {entry!.colorway}
-                    {product!.gsm !== null && (
-                      <span className="text-brass"> · {product!.gsm} GSM</span>
+                    {isHeaviest(product!) && (
+                      <span className="text-brass"> · The heaviest</span>
                     )}
                   </p>
                   <Link

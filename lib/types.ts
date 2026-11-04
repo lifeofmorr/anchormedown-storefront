@@ -41,6 +41,22 @@ export interface Product {
   collections: string[];
 }
 
+/**
+ * Internal data value — the heaviest verified fabric weight in the
+ * catalog (the thirteen-tee heavy line). Used ONLY to decide which
+ * products may carry the "THE HEAVIEST" badge/panel in the UI; the
+ * value itself is never rendered (brand language ruling, 2026-11-03:
+ * weight is sold in human words, never in numbers). Mirror of the
+ * data-computed maximum in lib/catalog (getHeaviestGsm) — keep in sync
+ * if the catalog's verified weights ever change.
+ */
+export const HEAVIEST_GSM = 425;
+
+/** True when the product belongs to the verified heaviest line. */
+export function isHeaviest(p: Pick<Product, "gsm">): boolean {
+  return p.gsm !== null && p.gsm === HEAVIEST_GSM;
+}
+
 export interface Collection {
   handle: string;
   title: string;

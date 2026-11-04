@@ -47,6 +47,18 @@ export function getVerifiedGsmProducts(gsm: number): Product[] {
   return catalog.products.filter((p) => p.gsm === gsm);
 }
 
+/** The heaviest verified fabric weight in the catalog, computed from data. */
+export function getHeaviestGsm(): number {
+  return Math.max(
+    ...catalog.products.map((p) => p.gsm ?? 0)
+  );
+}
+
+/** The verified heaviest line — products at the catalog's maximum weight. */
+export function getHeaviestProducts(): Product[] {
+  return getVerifiedGsmProducts(getHeaviestGsm());
+}
+
 export function getRelatedProducts(product: Product, count = 4): Product[] {
   const scored = catalog.products
     .filter((p) => p.handle !== product.handle)

@@ -8,7 +8,9 @@ import {
   getAllCollections,
   getCollection,
   getCollectionProducts,
+  getHeaviestGsm,
 } from "@/lib/catalog";
+import { isHeaviest } from "@/lib/types";
 
 export function generateStaticParams() {
   return getAllCollections().map((c) => ({ handle: c.handle }));
@@ -61,7 +63,7 @@ export default async function CollectionPage({
       .find((f): f is string => Boolean(f));
   const heroImg =
     campaignHero ?? collection.image ?? products[0]?.images[0]?.url;
-  const printed = products.filter((p) => p.gsm !== null).length;
+  const heavyCount = products.filter((p) => isHeaviest(p)).length;
 
   return (
     <div className="pb-24">
@@ -105,10 +107,10 @@ export default async function CollectionPage({
             )}
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-bone/70">
               {products.length} products
-              {printed > 0 && (
+              {heavyCount > 0 && (
                 <span className="text-brass">
                   {" "}
-                  · {printed} with a printed weight
+                  · {heavyCount} from the heaviest line
                 </span>
               )}
             </p>
@@ -118,7 +120,7 @@ export default async function CollectionPage({
 
       {/* ——— The rack: filterable, staggered ——— */}
       <section className="mx-auto max-w-[1440px] px-5 pt-16 md:px-10">
-        <CollectionGrid products={products} />
+        <CollectionGrid products={products} heaviestGsm={getHeaviestGsm()} />
       </section>
     </div>
   );

@@ -52,7 +52,7 @@ export default function BlackFridayPage() {
               of the year — and the list hears first.
             </p>
             <p className="mt-3 font-display text-xl uppercase tracking-wide text-brass">
-              425 GSM. The heaviest tee in the game. Built between the iron
+              The heaviest tee in the game. Built between the iron
               and the water.
             </p>
             <div className="mt-10 max-w-xl border border-bone/20 bg-ink/60 p-6 backdrop-blur-md">
@@ -101,9 +101,9 @@ export default function BlackFridayPage() {
               The heavyweight line
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-ash">
-              Every hero tee below is 425 GSM garment-dyed cotton, cut boxy,
-              XS–2XL, $60 — the fabric weight printed on every product page,
-              because we don&apos;t hide ours.
+              Every hero tee below is garment-dyed cotton, cut boxy,
+              XS–2XL, $60 — built the heaviest in the game, and you feel
+              it the second you pick it up.
             </p>
           </Reveal>
           <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-4">

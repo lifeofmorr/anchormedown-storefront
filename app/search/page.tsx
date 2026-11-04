@@ -4,17 +4,18 @@ import SiteSearch, {
 } from "@/components/SiteSearch";
 import { getAllArticles } from "@/lib/blog";
 import { getAllCollections, getAllProducts } from "@/lib/catalog";
+import { isHeaviest } from "@/lib/types";
 
 export const metadata = {
   title: "Search — Anchor Me Down Apparel",
   description:
-    "Search every Anchor Me Down product and journal dispatch — by name, fabric weight, collection, or story.",
+    "Search every Anchor Me Down product and journal dispatch — by name, weight class, collection, or story.",
 };
 
 /**
  * /search — server-built slim index over the typed catalog + blog
  * exports, searched client-side in components/SiteSearch.tsx.
- * Accepts ?q= so links like /search?q=425 land on live results.
+ * Accepts ?q= so links like /search?q=heaviest land on live results.
  */
 export default async function SearchPage({
   searchParams,
@@ -35,7 +36,8 @@ export default async function SearchPage({
       title: p.title,
       productType: p.productType,
       tags: p.tags,
-      gsm: p.gsm,
+      weightValue: p.gsm,
+      heaviest: isHeaviest(p),
       collections: p.collections,
       priceMin: p.priceMin,
       priceMax: p.priceMax,
@@ -45,7 +47,13 @@ export default async function SearchPage({
         p.productType,
         p.tags.join(" "),
         collectionNames,
+        // Silent legacy-token mapping (never rendered): a visitor who
+        // still searches by the old numeric term lands on the same
+        // products. Display copy speaks in words only.
         p.gsm !== null ? `${p.gsm} gsm ${p.gsm}gsm` : "",
+        // Word tokens for the heavy line, so "heaviest" finds it.
+        isHeaviest(p) ? "heaviest heavyweight heavy built heavy" : "",
+        p.gsm !== null && !isHeaviest(p) ? "heavyweight heavy" : "",
       ]
         .join(" ")
         .toLowerCase(),

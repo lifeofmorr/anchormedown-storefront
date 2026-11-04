@@ -24,9 +24,9 @@ const accent = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Anchor Me Down Apparel — 425 GSM. The Heaviest Tee in the Game.",
+  title: "Anchor Me Down Apparel — The Heaviest Tee in the Game.",
   description:
-    "425 GSM. The heaviest tee in the game. Built between the iron and the water. Stay Anchored.",
+    "The heaviest tee in the game. Built between the iron and the water. Stay Anchored.",
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ export default function Footer() {
             Anchor Me Down
           </p>
           <p className="mt-4 max-w-md text-sm leading-6 text-ash">
-            425 GSM. The heaviest tee in the game. Built between the iron and
+            The heaviest tee in the game. Built between the iron and
             the water. Stay Anchored.
           </p>
         </div>

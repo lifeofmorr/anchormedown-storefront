@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Product } from "@/lib/types";
+import { isHeaviest, type Product } from "@/lib/types";
 import { priceLabel } from "@/lib/format";
 
 /**
@@ -29,8 +29,8 @@ export default function BestSellerIndex({ products }: { products: Product[] }) {
             </span>
             <span className="mt-2 block text-[11px] uppercase tracking-[0.2em] text-ash">
               {p.productType}
-              {p.gsm !== null && (
-                <span className="text-brass"> · {p.gsm} GSM verified</span>
+              {isHeaviest(p) && (
+                <span className="text-brass"> · The heaviest</span>
               )}
             </span>
           </span>

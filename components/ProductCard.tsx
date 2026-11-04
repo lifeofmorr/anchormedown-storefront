@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import type { Product } from "@/lib/types";
+import { isHeaviest, type Product } from "@/lib/types";
 import { priceLabel } from "@/lib/format";
 import { useCart } from "@/lib/cart";
 
@@ -42,9 +42,9 @@ export default function ProductCard({ product }: { product: Product }) {
               className="object-cover opacity-0 transition-all duration-700 group-hover:scale-[1.04] group-hover:opacity-100"
             />
           )}
-          {product.gsm !== null && (
+          {isHeaviest(product) && (
             <span className="absolute left-3 top-3 bg-ink/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-brass backdrop-blur">
-              {product.gsm} GSM
+              The Heaviest
             </span>
           )}
         </div>
