@@ -51,7 +51,93 @@ body {
   }
 }
 .marquee-track {
-  animation: marquee 36s linear infinite;
+  animation: marquee 52s linear infinite;
+}
+
+/* ——— Elevation system (design-elevation pass) ——— */
+
+/* Ghost display type: outlined numerals/words set behind sections. */
+.text-stroke-bone {
+  -webkit-text-stroke: 1.5px rgba(237, 234, 227, 0.28);
+  color: transparent;
+}
+.text-stroke-brass {
+  -webkit-text-stroke: 1.5px rgba(200, 162, 75, 0.45);
+  color: transparent;
+}
+.text-stroke-faint {
+  -webkit-text-stroke: 1px rgba(237, 234, 227, 0.13);
+  color: transparent;
+}
+
+/* Film grain — a poster-print texture laid over hero/poster surfaces. */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Weight Room slider — a machined brass control on a seam track. */
+input[type="range"].weight-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].weight-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: #1d2026;
+}
+input[type="range"].weight-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -15px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: #c8a24b;
+  border: 3px solid #08090b;
+  box-shadow: 0 0 0 1.5px #c8a24b;
+}
+input[type="range"].weight-slider::-moz-range-track {
+  height: 2px;
+  background: #1d2026;
+}
+input[type="range"].weight-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: #c8a24b;
+  border: 3px solid #08090b;
+  box-shadow: 0 0 0 1.5px #c8a24b;
+}
+
+/* Weight columns ease between slider stops. */
+.weight-col {
+  transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Thin dark scrollbar, on-brief. */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #08090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e35;
+  border: 2px solid #08090b;
+  border-radius: 6px;
 }
 
 /* Slow ken-burns drift for hero photography */

@@ -28,9 +28,19 @@ export default function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm text-bone/80">
             <li><Link href="/pages/black-friday" className="hover:text-brass">Black Friday</Link></li>
             <li><Link href="/pages/giveaway" className="hover:text-brass">Giveaway</Link></li>
+            <li><Link href="/blog" className="hover:text-brass">The Journal</Link></li>
+            <li><Link href="/search" className="hover:text-brass">Search</Link></li>
             <li><Link href="/cart" className="hover:text-brass">Your Bag</Link></li>
           </ul>
         </div>
+      </div>
+      <div className="overflow-hidden border-t border-seam py-8">
+        <p
+          aria-hidden="true"
+          className="text-stroke-faint select-none whitespace-nowrap text-center font-display text-[11.5vw] uppercase leading-[0.85]"
+        >
+          Stay Anchored
+        </p>
       </div>
       <div className="border-t border-seam py-6 text-center text-[11px] tracking-[0.2em] uppercase text-ash">
         Free shipping on orders $200+ · Nov 27–30: free shipping $75+

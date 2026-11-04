@@ -62,3 +62,31 @@ export interface Catalog {
   pages: Record<string, StorePage>;
   exportedFrom: string;
 }
+
+export interface BlogArticleImage {
+  url: string;
+  width: number | null;
+  height: number | null;
+  alt: string;
+}
+
+export interface BlogArticle {
+  id: string;
+  handle: string;
+  title: string;
+  excerpt: string;
+  summaryHtml: string;
+  bodyHtml: string;
+  publishedAt: string;
+  updatedAt: string;
+  tags: string[];
+  author: string;
+  image: BlogArticleImage | null;
+}
+
+export interface Blog {
+  blogHandle: string;
+  blogTitle: string;
+  articles: BlogArticle[];
+  exportedFrom: string;
+}

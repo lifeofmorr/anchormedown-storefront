@@ -27,10 +27,10 @@ export default function PurchasePanel({ product }: { product: Product }) {
   const main = product.images[activeImg] ?? product.images[0];
 
   return (
-    <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+    <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
       {/* Gallery */}
       <div>
-        <div className="relative aspect-square overflow-hidden bg-coal">
+        <div className="relative aspect-[4/5] overflow-hidden bg-coal">
           {main && (
             <Image
               key={main.url}
@@ -45,6 +45,11 @@ export default function PurchasePanel({ product }: { product: Product }) {
           {product.gsm !== null && (
             <span className="absolute left-4 top-4 bg-ink/85 px-3 py-1.5 text-[11px] font-semibold tracking-[0.22em] text-brass uppercase backdrop-blur">
               {product.gsm} GSM — Verified Weight
+            </span>
+          )}
+          {product.images.length > 1 && (
+            <span className="absolute bottom-4 left-4 bg-ink/85 px-3 py-1.5 text-[11px] font-semibold tracking-[0.22em] text-bone/85 backdrop-blur">
+              {String(activeImg + 1).padStart(2, "0")} / {String(product.images.length).padStart(2, "0")}
             </span>
           )}
         </div>
@@ -66,15 +71,15 @@ export default function PurchasePanel({ product }: { product: Product }) {
         )}
       </div>
 
-      {/* Buy column */}
-      <div>
+      {/* Buy column — sticky on desktop */}
+      <div className="lg:sticky lg:top-36">
         <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
           {product.productType}
         </p>
-        <h1 className="mt-3 font-display text-5xl uppercase leading-[0.95] text-bone md:text-6xl">
+        <h1 className="mt-3 font-display text-5xl uppercase leading-[0.92] text-bone md:text-7xl">
           {product.title}
         </h1>
-        <p className="mt-4 text-2xl text-bone">
+        <p className="mt-5 text-2xl text-bone">
           {variant ? money(variant.price) : money(product.priceMin)}
           {variant?.compareAtPrice && (
             <span className="ml-3 text-lg text-ash line-through">
@@ -84,11 +89,44 @@ export default function PurchasePanel({ product }: { product: Product }) {
         </p>
 
         {product.gsm !== null ? (
-          <div className="mt-6 border border-brass/40 bg-brass/5 px-5 py-4">
-            <p className="font-display text-xl uppercase tracking-wide text-bone">
-              {product.gsm} GSM fabric
-            </p>
-            <p className="mt-1 text-sm leading-6 text-ash">
+          <div className="mt-7 border border-brass/40 bg-brass/5 px-6 py-6">
+            <div className="flex items-end justify-between gap-4">
+              <p className="font-display text-6xl leading-none text-bone">
+                {product.gsm}
+                <span className="ml-2 align-top text-lg tracking-[0.14em] text-brass">
+                  GSM
+                </span>
+              </p>
+              <p className="pb-1 text-right text-[10px] font-semibold uppercase tracking-[0.22em] text-brass">
+                Verified
+                <br />
+                fabric weight
+              </p>
+            </div>
+            <div className="mt-6 space-y-3">
+              <div>
+                <div className="flex justify-between text-[10px] uppercase tracking-[0.2em] text-ash">
+                  <span className="text-bone">This piece</span>
+                  <span>{product.gsm} g/m²</span>
+                </div>
+                <div className="mt-1.5 h-1.5 bg-seam">
+                  <div
+                    className="h-full bg-brass"
+                    style={{ width: `${(product.gsm / 450) * 100}%` }}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-[10px] uppercase tracking-[0.2em] text-ash">
+                  <span>A typical tee</span>
+                  <span>180 g/m²</span>
+                </div>
+                <div className="mt-1.5 h-1.5 bg-seam">
+                  <div className="h-full bg-bone/30" style={{ width: "40%" }} />
+                </div>
+              </div>
+            </div>
+            <p className="mt-5 text-sm leading-6 text-ash">
               The fabric weight is printed here because we don&apos;t hide
               ours. Most brands won&apos;t tell you theirs.
             </p>

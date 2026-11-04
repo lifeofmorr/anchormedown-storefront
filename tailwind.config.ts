@@ -16,6 +16,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],
         body: ["var(--font-body)", "sans-serif"],
+        accent: ["var(--font-accent)", "serif"],
       },
       letterSpacing: { mega: "0.35em" },
     },

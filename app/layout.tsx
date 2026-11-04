@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anton, Inter } from "next/font/google";
+import { Anton, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -15,6 +15,13 @@ const body = Inter({
   subsets: ["latin"],
   variable: "--font-body",
 });
+/** Editorial serif italic — the accent voice against the Anton display type. */
+const accent = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-accent",
+});
 
 export const metadata: Metadata = {
   title: "Anchor Me Down Apparel — 425 GSM. The Heaviest Tee in the Game.",
@@ -28,7 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${accent.variable}`}
+    >
       <body className="bg-ink font-body text-bone antialiased">
         <CartProvider>
           <Header />

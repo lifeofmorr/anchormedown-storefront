@@ -47,14 +47,29 @@ description, related products, native Product JSON-LD.
 | `/pages/black-friday` | `app/pages/black-friday/page.tsx` | ✅ Mirrors the live page body + working CaptureForm; **zero discount codes** (hard rule kept) |
 | `/pages/giveaway` | `app/pages/giveaway/page.tsx` | ✅ Mirrors the live page body; verified zero ANCHORED15 |
 
+## Journal (blog) — wave 2
+
+| Live path | Headless route | Status |
+|---|---|---|
+| `/blogs/news` (index) | `app/blog/page.tsx` → `/blog` | ✅ Built (+ rewrite `/blogs/news` → `/blog`) |
+| `/blogs/news/<handle>` | `app/blog/[handle]/page.tsx` → `/blog/<handle>` | ✅ Built for **every published article (150)** — handles 1:1 with the live store; rewrite `/blogs/news/:handle` → `/blog/:handle` in `next.config.mjs` keeps the live URL shape resolving to the same article |
+| `/search` | `app/search/page.tsx` | ✅ Built (wave 2) — real client-side search over catalog + journal (title, tags, GSM, collection); accepts `?q=` |
+
+Journal pages: full body HTML, hero image where the article carries one
+(108/150), related-products rail (products linked in the body, else
+tag/title match), related-article tiles, Article JSON-LD. Data:
+`data/blog.json` via `scripts/export-blog.py` + `scripts/transform-blog.py`
+(blog `gid://shopify/Blog/57294787`).
+
 ## Known gaps (outside this pass's mandated set — wave-2 list)
 
-- `/search` + predictive search (theme-side today; see APPS-AUDIT.md).
+- Predictive search-as-you-type in the header (theme-side today; see
+  APPS-AUDIT.md) — wave 2 adds the `/search` route and a footer link; the
+  header is owned by the design-elevation pass.
 - `/pages/*` long tail (about, size-guide, shipping-returns, press, faq…):
   18 published pages exist on the live store; only black-friday + giveaway
   were mandated this pass. The data-layer pattern extends directly — each is
   one route rendering its exported body.
-- `/blogs/news/*` — the store blog (~143 articles) is not in this pass.
 - Customer accounts (`/account/*`) stay on Shopify-hosted pages at cutover
   via checkout/account links, or move to new customer accounts — a cutover
   decision for the gate list, not built here.

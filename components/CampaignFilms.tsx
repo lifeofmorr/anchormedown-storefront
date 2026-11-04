@@ -36,24 +36,30 @@ const PANELS = [
 export default function CampaignFilms() {
   return (
     <section className="bg-coal">
-      <div className="mx-auto max-w-[1440px] px-5 pb-16 pt-24 md:px-10">
+      <div className="mx-auto max-w-[1440px] px-5 pb-20 pt-28 md:px-10">
         <Reveal>
           <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
-            Two worlds · One uniform
+            02 · Two worlds · One uniform
           </p>
-          <h2 className="mt-3 max-w-3xl font-display text-5xl uppercase leading-[0.95] text-bone md:text-7xl">
+          <h2 className="mt-4 max-w-4xl font-display text-6xl uppercase leading-[0.9] text-bone md:text-8xl">
             The current <span className="text-brass">meets</span> the work
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-7 text-ash">
+          <p className="mt-6 max-w-xl text-base leading-7 text-ash">
             Offshore confidence and training-floor discipline meet in one
             cinematic wardrobe, built to move without losing its shape.
           </p>
         </Reveal>
       </div>
       <div role="group" aria-label="Water and iron campaign films">
-        {PANELS.map((panel) => (
+        {PANELS.map((panel, pi) => (
           <article key={panel.world.id} className="relative overflow-hidden">
-            <div className="relative min-h-[80svh]">
+            <span
+              aria-hidden="true"
+              className="text-stroke-faint pointer-events-none absolute right-2 top-8 z-10 select-none font-display text-[11rem] leading-none md:text-[17rem]"
+            >
+              0{pi + 1}
+            </span>
+            <div className="relative min-h-[100svh]">
               <div className="absolute inset-0">
                 <Film
                   src={panel.world.film}
@@ -63,12 +69,12 @@ export default function CampaignFilms() {
               </div>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-transparent" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0">
-                <div className="mx-auto max-w-[1440px] px-5 pb-14 md:px-10">
+                <div className="mx-auto max-w-[1440px] px-5 pb-16 md:px-10">
                   <Reveal>
                     <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
                       {panel.kicker}
                     </p>
-                    <h3 className="mt-3 max-w-2xl font-display text-5xl uppercase leading-[0.95] text-bone md:text-7xl">
+                    <h3 className="mt-3 max-w-3xl font-display text-6xl uppercase leading-[0.9] text-bone md:text-8xl">
                       {panel.heading}
                     </h3>
                     <p className="mt-4 max-w-md text-base leading-7 text-bone/80">

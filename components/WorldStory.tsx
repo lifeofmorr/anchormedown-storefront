@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Film from "@/components/Film";
 import Reveal from "@/components/Reveal";
+import Parallax from "@/components/Parallax";
 import { HERO_WORLDS } from "@/lib/campaign";
 
 /**
@@ -12,26 +13,30 @@ import { HERO_WORLDS } from "@/lib/campaign";
 export default function WorldStory() {
   const water = HERO_WORLDS[0];
   return (
-    <section className="mx-auto max-w-[1440px] px-5 py-24 md:px-10 md:py-32">
-      <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+    <section className="mx-auto max-w-[1440px] px-5 py-28 md:px-10 md:py-40">
+      <div className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
         <Reveal>
           <div className="relative aspect-[4/5] overflow-hidden">
-            <Film
-              src={water.film}
-              poster={water.poster}
-              label="Our story"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
+            <Parallax speed={0.06} className="absolute inset-x-0 -inset-y-12">
+              <div className="relative h-full w-full">
+                <Film
+                  src={water.film}
+                  poster={water.poster}
+                  label="Our story"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            </Parallax>
           </div>
         </Reveal>
         <Reveal delay={120}>
           <p className="text-[11px] font-semibold uppercase tracking-mega text-brass">
             Our story
           </p>
-          <h2 className="mt-4 font-display text-5xl uppercase leading-[0.95] text-bone md:text-6xl">
+          <h2 className="mt-4 font-display text-5xl uppercase leading-[0.92] text-bone md:text-7xl">
             The anchor does not mean <span className="text-brass">stand still.</span>
           </h2>
-          <blockquote className="mt-6 font-display text-2xl uppercase tracking-wide text-bone">
+          <blockquote className="mt-8 font-accent text-4xl italic leading-tight text-bone md:text-5xl">
             It means hold.
           </blockquote>
           <p className="mt-5 max-w-md text-base leading-7 text-ash">
